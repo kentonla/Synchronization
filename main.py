@@ -1,8 +1,16 @@
 import time
 import random
-from threading import Thread
+from threading import Thread, Lock, Semaphore
 # https://docs.python.org/3/library/threading.html
 
+mutex = Lock()
+forks = [
+    Semaphore(),
+    Semaphore(),
+    Semaphore(),
+    Semaphore(),
+    Semaphore()
+]
 
 # Uses philosopher_number to identify how many philosphers wishing to eat.
 # When a philosopher finishes eating, a call is made to return_forks(philosopher_number)
