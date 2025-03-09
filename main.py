@@ -13,13 +13,35 @@ cond = [
 ]
 
 # Helps know which philosopher is next to who at a circular table
-LEFT = lambda i: (i - 1 + 5) % 5
-RIGHT = lambda i: (i + 1) % 5
+LEFT_OF = lambda i: (i - 1 + 5) % 5
+RIGHT_OF = lambda i: (i + 1) % 5
+
+# Lets us know what each philosopher is doing
+# Used for directing a philosopher to wait for neighboring philosopher to finish, in order to pickup fork
+philosopher_status = ['waiting', 'waiting', 'waiting', 'waiting', 'waiting']
 
 # Uses philosopher_number to identify how many philosphers wishing to eat.
 # When a philosopher finishes eating, a call is made to return_forks(philosopher_number)
 def pickup_forks(philosopher_number):
-    pass
+    l = LEFT_OF(philosopher_number)
+    r = RIGHT_OF(philosopher_number)
+    
+    with mutex:
+        philosopher_status[philosopher_number] = 'waiting'
+        
+        # Waits for threads of neighboring philosophers who are currently eating to finish
+        while philosopher_status[philosopher_number] == 'waiting' and (philosopher_status[l] == 'eating' or philosopher_status[r] == 'eating'):
+            if philosopher_status[l] == 'eating':
+                print(f"Forks are with Philosopher #{l}")
+            elif philosopher_status[r] == 'eating':
+                print(f"Forks are with Philosopher #{r}")
+            cond[philosopher_number].wait()
+            
+        # Once all neighboring philosophers finish eating, allow the current philosopher to pickup fork
+        if philosopher_status[philosopher_number] == 'waiting':
+            philosopher_status[philosopher_number] = 'eating'
+            print(f"Philosopher #{philosopher_number} picked up fork")
+        
 
 def return_forks(philosopher_number):
     pass
