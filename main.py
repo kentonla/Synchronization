@@ -60,10 +60,11 @@ def return_forks(philosopher_number):
 # Handles all of the actions a philosopher does
 # A philosopher has to think to pickup fork, then eat, and then put down the fork
 def alternate(philosopher_number):
-    philosopher_thinking(philosopher_number)
-    pickup_forks(philosopher_number)
-    philosopher_eating(philosopher_number)
-    return_forks(philosopher_number)
+    while True:
+        philosopher_thinking(philosopher_number)
+        pickup_forks(philosopher_number)
+        philosopher_eating(philosopher_number)
+        return_forks(philosopher_number)
     
 
 def philosopher_thinking(philosopher_number):
