@@ -37,5 +37,16 @@ def random_thread_sleep():
 if __name__ == "__main__":
     # Create 5 philosophers, identified by a number 0, 1, 2, 3, and 4
     # Each philosopher runs as a seprate thread
+    Thread(target=alternate(0)).start()
+    Thread(target=alternate(1)).start()
+    Thread(target=alternate(2)).start()
+    Thread(target=alternate(3)).start()
+    Thread(target=alternate(4)).start()
+    
+    Thread(target=alternate(0)).end()
+    Thread(target=alternate(1)).end()
+    Thread(target=alternate(2)).end()
+    Thread(target=alternate(3)).end()
+    Thread(target=alternate(4)).end()
     
     exit
