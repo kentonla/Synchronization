@@ -18,7 +18,8 @@ RIGHT_OF = lambda i: (i + 1) % 5
 
 # Lets us know what each philosopher is doing
 # Used for directing a philosopher to wait for neighboring philosopher to finish, in order to pickup fork
-philosopher_status = ['waiting', 'waiting', 'waiting', 'waiting', 'waiting']
+# or put a fork down when finished eating
+philosopher_status = ['thinking', 'thinking', 'thinking', 'thinking', 'thinking']
 
 # Uses philosopher_number to identify how many philosphers wishing to eat.
 # When a philosopher finishes eating, a call is made to return_forks(philosopher_number)
@@ -44,7 +45,16 @@ def pickup_forks(philosopher_number):
         
 
 def return_forks(philosopher_number):
-    pass
+    l = LEFT_OF(philosopher_number)
+    r = RIGHT_OF(philosopher_number)
+    
+    with mutex:
+        philosopher_status[philosopher_number] = 'thinking'
+        
+        print(f"Philosopher #{philosopher_number} put down their fork")
+        cond[l].notify()
+        cond[r].notify()
+        
 
 # Alternates philosopher between thinking and eating
 # Handles all of the actions a philosopher does
