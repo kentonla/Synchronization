@@ -23,10 +23,12 @@ def alternate(philosopher_number):
     
 
 def philosopher_thinking(philosopher_number):
-    pass
+    think_time = random_thread_sleep()
+    print(f"Philosopher #{philosopher_number} took {think_time}ms thinking")
 
 def philosopher_eating(philosopher_number):
-    pass
+    eat_time = random_thread_sleep()
+    print(f"Philosopher #{philosopher_number} took {eat_time}ms eating")
 
 # To stimulate both thinking and eating, this function will put threads to sleep for a random period of time between 1-3 seconds
 def random_thread_sleep():
@@ -37,16 +39,18 @@ def random_thread_sleep():
 if __name__ == "__main__":
     # Create 5 philosophers, identified by a number 0, 1, 2, 3, and 4
     # Each philosopher runs as a seprate thread
-    Thread(target=alternate(0)).start()
-    Thread(target=alternate(1)).start()
-    Thread(target=alternate(2)).start()
-    Thread(target=alternate(3)).start()
-    Thread(target=alternate(4)).start()
-    
-    Thread(target=alternate(0)).end()
-    Thread(target=alternate(1)).end()
-    Thread(target=alternate(2)).end()
-    Thread(target=alternate(3)).end()
-    Thread(target=alternate(4)).end()
+    philosophers = [
+    Thread(target=alternate(0)),
+    Thread(target=alternate(1)),
+    Thread(target=alternate(2)),
+    Thread(target=alternate(3)),
+    Thread(target=alternate(4))
+    ]
+   
+    for philosopher in philosophers:
+        philosopher.start()
+       
+    for philosopher in philosophers:
+        philosopher.join()
     
     exit
