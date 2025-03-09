@@ -78,6 +78,7 @@ def philosopher_eating(philosopher_number):
 def random_thread_sleep():
     delay = random.randint(1,3)
     time.sleep(delay)
+    return delay
 
 
 if __name__ == "__main__":
