@@ -1,16 +1,20 @@
 import time
 import random
-from threading import Thread, Lock, Semaphore
+from threading import Thread, Lock, Condition
 # https://docs.python.org/3/library/threading.html
 
 mutex = Lock()
-forks = [
-    Semaphore(),
-    Semaphore(),
-    Semaphore(),
-    Semaphore(),
-    Semaphore()
+cond = [
+    Condition(mutex),
+    Condition(mutex),
+    Condition(mutex),
+    Condition(mutex),
+    Condition(mutex)
 ]
+
+# Helps know which philosopher is next to who at a circular table
+LEFT = lambda i: (i - 1 + 5) % 5
+RIGHT = lambda i: (i + 1) % 5
 
 # Uses philosopher_number to identify how many philosphers wishing to eat.
 # When a philosopher finishes eating, a call is made to return_forks(philosopher_number)
@@ -31,12 +35,12 @@ def alternate(philosopher_number):
     
 
 def philosopher_thinking(philosopher_number):
-    think_time = random_thread_sleep()
-    print(f"Philosopher #{philosopher_number} took {think_time}ms thinking")
+    time = random_thread_sleep()
+    print(f"Philosopher #{philosopher_number} took {time}ms thinking")
 
 def philosopher_eating(philosopher_number):
-    eat_time = random_thread_sleep()
-    print(f"Philosopher #{philosopher_number} took {eat_time}ms eating")
+    time = random_thread_sleep()
+    print(f"Philosopher #{philosopher_number} took {time}ms eating")
 
 # To stimulate both thinking and eating, this function will put threads to sleep for a random period of time between 1-3 seconds
 def random_thread_sleep():
